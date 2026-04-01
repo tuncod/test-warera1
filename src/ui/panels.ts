@@ -201,6 +201,153 @@ export class InfoPanel {
     this.occupationsContainer.appendChild(this.createExpandableList('Occupying', occupying));
   }
 
+  showPotentialAllies(data: {
+    highPotential: Array<{ country: Country; sharedEnemies: Country[]; sharedCount: number }>;
+    regularPotential: Country[];
+  }): void {
+    // Handle empty case
+    if (data.highPotential.length === 0 && data.regularPotential.length === 0) {
+      this.renderPotentialAlliesEmpty();
+      return;
+    }
+
+    this.renderPotentialAlliesData(data);
+  }
+
+  private renderPotentialAlliesLoading(): void {
+    this.potentialAlliesContainer.innerHTML = '<span style="color: #888; font-style: italic;">Calculating potential allies...</span>';
+  }
+
+  private renderPotentialAlliesEmpty(): void {
+    const container = document.createElement('div');
+    container.className = 'info-list-expandable';
+
+    const header = document.createElement('div');
+    header.className = 'info-list-header';
+    header.innerHTML = `
+      <span class="info-list-count">No potential allies</span>
+      <span class="info-list-expand">▼</span>
+    `;
+
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'info-list-items';
+    itemsContainer.innerHTML = '<span style="color: #666; font-size: 13px; padding: 8px;">No potential allies found</span>';
+
+    header.addEventListener('click', () => {
+      const isExpanded = itemsContainer.classList.toggle('expanded');
+      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
+    });
+
+    container.appendChild(header);
+    container.appendChild(itemsContainer);
+
+    this.potentialAlliesContainer.innerHTML = '';
+    this.potentialAlliesContainer.appendChild(container);
+  }
+
+  private renderPotentialAlliesData(data: {
+    highPotential: Array<{ country: Country; sharedEnemies: Country[]; sharedCount: number }>;
+    regularPotential: Country[];
+  }): void {
+    const totalCount = data.highPotential.length + data.regularPotential.length;
+
+    const container = document.createElement('div');
+    container.className = 'info-list-expandable';
+
+    const header = document.createElement('div');
+    header.className = 'info-list-header';
+    header.innerHTML = `
+      <span class="info-list-count">${totalCount} Potential Allies</span>
+      <span class="info-list-expand">▼</span>
+    `;
+
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'info-list-items';
+
+    // Add High Potential subsection if present
+    if (data.highPotential.length > 0) {
+      itemsContainer.appendChild(this.createPotentialAlliesList('★ High Potential', data.highPotential.map(hp => ({
+        name: hp.country.name,
+        id: hp.country.id,
+        badge: `Shared: ${hp.sharedEnemies.map(e => e.name).join(', ')}`
+      }))));
+    }
+
+    // Add Regular Potential subsection if present
+    if (data.regularPotential.length > 0) {
+      itemsContainer.appendChild(this.createPotentialAlliesList('Potential', data.regularPotential.map(rp => ({
+        name: rp.name,
+        id: rp.id,
+        badge: null
+      }))));
+    }
+
+    header.addEventListener('click', () => {
+      const isExpanded = itemsContainer.classList.toggle('expanded');
+      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
+    });
+
+    container.appendChild(header);
+    container.appendChild(itemsContainer);
+
+    this.potentialAlliesContainer.innerHTML = '';
+    this.potentialAlliesContainer.appendChild(container);
+  }
+
+  private createPotentialAlliesList(label: string, items: Array<{ name: string; id: string; badge: string | null }>): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'info-list-expandable';
+    container.style.marginTop = '8px';
+
+    const header = document.createElement('div');
+    header.className = 'info-list-header';
+    header.innerHTML = `
+      <span class="info-list-count">${items.length} ${label}</span>
+      <span class="info-list-expand">▼</span>
+    `;
+
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'info-list-items';
+
+    items.forEach(item => {
+      const itemEl = document.createElement('span');
+      itemEl.className = 'info-list-item';
+      itemEl.style.cursor = 'pointer';
+
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = item.name;
+      itemEl.appendChild(nameSpan);
+
+      // Add badge if present
+      if (item.badge) {
+        const badge = document.createElement('span');
+        badge.className = 'potential-badge high';
+        badge.textContent = item.badge;
+        itemEl.appendChild(badge);
+      }
+
+      // Add click handler to select country
+      itemEl.addEventListener('click', () => {
+        const country = state.getCountries().find(c => c.id === item.id);
+        if (country) {
+          state.selectCountry(country);
+        }
+      });
+
+      itemsContainer.appendChild(itemEl);
+    });
+
+    header.addEventListener('click', () => {
+      const isExpanded = itemsContainer.classList.toggle('expanded');
+      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
+    });
+
+    container.appendChild(header);
+    container.appendChild(itemsContainer);
+
+    return container;
+  }
+
   hide(): void {
     this.panel.classList.add('hidden');
     state.selectCountry(null);
