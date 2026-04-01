@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>War Era Alliance Network</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script type="module" crossorigin src="/assets/index-9uxtZqU6.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/three-DOngoYiD.js">
+  <link rel="stylesheet" crossorigin href="/assets/index-COZBPsP1.css">
+</head>
+<body>
+  <div id="canvas-container"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading country data...</div>
+  </div>
+
+  <!-- Help Panel -->
+  <div id="help-panel" class="hidden">
+    <h3>🌍 How to Navigate</h3>
+    <div class="help-item">
+      <span class="help-key">Drag</span>
+      <span>Rotate the globe</span>
+    </div>
+    <div class="help-item">
+      <span class="help-key">Scroll</span>
+      <span>Zoom in/out</span>
+    </div>
+    <div class="help-item">
+      <span class="help-key">Click</span>
+      <span>Select country & view details</span>
+    </div>
+    <div class="help-item">
+      <span class="help-key">Drag header</span>
+      <span>Move info panel</span>
+    </div>
+    <div class="help-item">
+      <span class="help-key">Ctrl+K</span>
+      <span>Search countries</span>
+    </div>
+    <div class="help-item">
+      <span class="help-key">Double-click</span>
+      <span>Reset view</span>
+    </div>
+    <div class="help-item">
+      <span class="help-key">ESC</span>
+      <span>Close panels</span>
+    </div>
+    <button class="help-close" id="help-close-btn">Got it, thanks!</button>
+  </div>
+
+  <div id="ui-layer">
+    <!-- Stats Panel -->
+    <div id="stats-panel">
+      <div class="stat"><span id="stat-countries">-</span> Countries</div>
+      <div class="stat"><span id="stat-alliances">-</span> Alliances<span class="stat-context" id="stat-alliances-avg"></span></div>
+      <div class="stat"><span id="stat-wars">-</span> Wars<span class="stat-context" id="stat-wars-avg"></span></div>
+    </div>
+
+    <!-- Search Container -->
+    <div id="search-container">
+      <button id="search-toggle" title="Search (Ctrl+K)" aria-label="Search countries"><i data-lucide="search"></i></button>
+      <div id="search-panel" class="hidden">
+        <input type="text" id="search-input" placeholder="Search countries..." aria-label="Search countries" autocomplete="off">
+        <div id="search-results"></div>
+      </div>
+    </div>
+
+    <!-- Filter Container removed -->
+
+    <!-- Info Panel -->
+    <div id="info-panel" class="hidden">
+      <div id="info-header">
+        <div id="info-title">
+          <span id="info-flag"></span>
+          <h2 id="info-name"></h2>
+        </div>
+        <button id="info-close" aria-label="Close info panel"><i data-lucide="x"></i></button>
+      </div>
+      <div id="info-content">
+        <div class="info-row">
+          <span class="label">Treasury</span>
+          <span class="value highlight" id="info-treasury"></span>
+        </div>
+        <div class="info-row">
+          <span class="label">Allies</span>
+          <div id="info-allies-container"></div>
+        </div>
+        <div class="info-row">
+          <span class="label">Wars</span>
+          <div id="info-wars-container"></div>
+        </div>
+        <div class="info-row">
+          <span class="label">Occupations</span>
+          <div id="info-occupations-container"></div>
+        </div>
+        <div class="info-row">
+          <span class="label">High Potential Allies</span>
+          <div id="info-high-potential-allies-container"></div>
+        </div>
+        <div class="info-row">
+          <span class="label">Potential Allies</span>
+          <div id="info-potential-allies-container"></div>
+        </div>
+      </div>
+      <div class="info-hint">Press ESC to close • Double-click background to reset view</div>
+    </div>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="hidden"></div>
+
+    <!-- Auto-rotation Indicator -->
+    <div id="auto-rotate-indicator" class="hidden">
+      <i data-lucide="rotate-cw"></i>
+      <span>Auto-rotating</span>
+    </div>
+
+    <!-- Help Toggle -->
+    <button id="help-toggle" aria-label="Show help"><i data-lucide="help-circle"></i> Help</button>
+
+    <!-- Reset View Button -->
+    <button id="reset-view" aria-label="Reset view"><i data-lucide="refresh-ccw"></i> Reset View</button>
+  </div>
+
+</body>
+</html>

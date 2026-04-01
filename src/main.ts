@@ -480,10 +480,10 @@ class App {
     // Sort regular potential by name
     regularPotential.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Limit to 10 per category
+    // Limit to 20 per category
     return {
-      highPotential: highPotential.slice(0, 10),
-      regularPotential: regularPotential.slice(0, 10)
+      highPotential: highPotential.slice(0, 20),
+      regularPotential: regularPotential.slice(0, 20)
     };
   }
 
