@@ -131,6 +131,149 @@ export class InfoPanel {
     return container;
   }
 
+  private async showOccupations(country: Country): Promise<void> {
+    // Check in-memory cache first
+    if (this.occupationCache.has(country.id)) {
+      const data = this.occupationCache.get(country.id)!;
+      this.renderOccupationsData(data.occupying, data.occupiedBy);
+      return;
+    }
+
+    // Prevent duplicate requests
+    if (this.loadingCountryId === country.id) {
+      return;
+    }
+
+    // Show loading state
+    this.renderOccupationsLoading();
+
+    // Fetch data
+    this.loadingCountryId = country.id;
+    const data = await fetchOccupations(country.id);
+    this.loadingCountryId = null;
+
+    if (!data) {
+      this.renderOccupationsError();
+      return;
+    }
+
+    // Cache and render
+    this.occupationCache.set(country.id, data);
+    this.renderOccupationsData(data.occupying, data.occupiedBy);
+  }
+
+  private renderOccupationsLoading(): void {
+    this.occupationsContainer.innerHTML = '<span style="color: #888; font-style: italic;">Loading occupations...</span>';
+  }
+
+  private renderOccupationsError(): void {
+    this.occupationsContainer.innerHTML = '<span style="color: #888; font-style: italic;">No occupation data available</span>';
+  }
+
+  private renderOccupationsEmpty(): void {
+    const container = document.createElement('div');
+    container.className = 'info-list-expandable';
+
+    const header = document.createElement('div');
+    header.className = 'info-list-header';
+    header.innerHTML = `
+      <span class="info-list-count">No occupations</span>
+      <span class="info-list-expand">▼</span>
+    `;
+
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'info-list-items';
+    itemsContainer.innerHTML = '<span style="color: #666; font-size: 13px; padding: 8px;">No active occupations</span>';
+
+    header.addEventListener('click', () => {
+      const isExpanded = itemsContainer.classList.toggle('expanded');
+      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
+    });
+
+    container.appendChild(header);
+    container.appendChild(itemsContainer);
+
+    this.occupationsContainer.innerHTML = '';
+    this.occupationsContainer.appendChild(container);
+  }
+
+  private createOccupationList(label: string, items: string[]): HTMLElement {
+    const container = document.createElement('div');
+    container.className = 'info-list-expandable';
+    container.style.marginTop = '8px';
+
+    const header = document.createElement('div');
+    header.className = 'info-list-header';
+    header.innerHTML = `
+      <span class="info-list-count">${items.length} ${label}</span>
+      <span class="info-list-expand">▼</span>
+    `;
+
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'info-list-items';
+
+    items.forEach(item => {
+      const itemEl = document.createElement('span');
+      itemEl.className = 'info-list-item';
+      itemEl.textContent = item;
+      itemEl.title = item;
+      itemsContainer.appendChild(itemEl);
+    });
+
+    header.addEventListener('click', () => {
+      const isExpanded = itemsContainer.classList.toggle('expanded');
+      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
+    });
+
+    container.appendChild(header);
+    container.appendChild(itemsContainer);
+
+    return container;
+  }
+
+  private renderOccupationsData(occupying: string[], occupiedBy: string[]): void {
+    const total = occupying.length + occupiedBy.length;
+
+    // Handle empty case
+    if (total === 0) {
+      this.renderOccupationsEmpty();
+      return;
+    }
+
+    const container = document.createElement('div');
+    container.className = 'info-list-expandable';
+
+    const header = document.createElement('div');
+    header.className = 'info-list-header';
+    header.innerHTML = `
+      <span class="info-list-count">${total} Occupations</span>
+      <span class="info-list-expand">▼</span>
+    `;
+
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'info-list-items';
+
+    // Add subsections
+    if (occupying.length > 0) {
+      itemsContainer.appendChild(this.createOccupationList('Occupying', occupying));
+    }
+
+    if (occupiedBy.length > 0) {
+      itemsContainer.appendChild(this.createOccupationList('Occupied by', occupiedBy));
+    }
+
+    header.addEventListener('click', () => {
+      const isExpanded = itemsContainer.classList.toggle('expanded');
+      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
+    });
+
+    container.appendChild(header);
+    container.appendChild(itemsContainer);
+
+    this.occupationsContainer.innerHTML = '';
+    this.occupationsContainer.appendChild(container);
+  }
+
   hide(): void {
     this.panel.classList.add('hidden');
     state.selectCountry(null);
