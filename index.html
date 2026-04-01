@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>War Era Alliance Network</title>
   <link rel="stylesheet" href="/src/styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div id="canvas-container"></div>
@@ -59,7 +60,7 @@
 
     <!-- Search Container -->
     <div id="search-container">
-      <button id="search-toggle" title="Search (Ctrl+K)" aria-label="Search countries">🔍</button>
+      <button id="search-toggle" title="Search (Ctrl+K)" aria-label="Search countries"><i data-lucide="search"></i></button>
       <div id="search-panel" class="hidden">
         <input type="text" id="search-input" placeholder="Search countries..." aria-label="Search countries" autocomplete="off">
         <div id="search-results"></div>
@@ -75,7 +76,7 @@
           <span id="info-flag"></span>
           <h2 id="info-name"></h2>
         </div>
-        <button id="info-close" aria-label="Close info panel">×</button>
+        <button id="info-close" aria-label="Close info panel"><i data-lucide="x"></i></button>
       </div>
       <div id="info-content">
         <div class="info-row">
@@ -94,6 +95,10 @@
           <span class="label">Occupations</span>
           <div id="info-occupations-container"></div>
         </div>
+        <div class="info-row">
+          <span class="label">Potential Allies</span>
+          <div id="info-potential-allies-container"></div>
+        </div>
       </div>
       <div class="info-hint">Press ESC to close • Double-click background to reset view</div>
     </div>
@@ -103,15 +108,15 @@
 
     <!-- Auto-rotation Indicator -->
     <div id="auto-rotate-indicator" class="hidden">
-      <span class="rotate-icon">↻</span>
+      <i data-lucide="rotate-cw"></i>
       <span>Auto-rotating</span>
     </div>
 
     <!-- Help Toggle -->
-    <button id="help-toggle" aria-label="Show help">❓ Help</button>
+    <button id="help-toggle" aria-label="Show help"><i data-lucide="help-circle"></i> Help</button>
 
     <!-- Reset View Button -->
-    <button id="reset-view" aria-label="Reset view">↺ Reset View</button>
+    <button id="reset-view" aria-label="Reset view"><i data-lucide="refresh-ccw"></i> Reset View</button>
   </div>
 
   <script type="module" src="/src/main.ts"></script>
