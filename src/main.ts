@@ -422,8 +422,69 @@ class App {
     highPotential: Array<{ country: Country; sharedEnemies: Country[]; sharedCount: number }>;
     regularPotential: Country[];
   } {
-    // Implementation in next task
-    return { highPotential: [], regularPotential: [] };
+    const countries = state.getCountries();
+    const enemyIds = new Set(country.warsWith);
+    const allyIds = new Set(country.allies);
+
+    // Build a map of enemy names for shared enemy lookup
+    const enemyMap = new Map<string, Country>();
+    country.warsWith.forEach(enemyId => {
+      const enemy = countries.find(c => c.id === enemyId);
+      if (enemy) enemyMap.set(enemyId, enemy);
+    });
+
+    const highPotential: Array<{ country: Country; sharedEnemies: Country[]; sharedCount: number }> = [];
+    const regularPotential: Country[] = [];
+
+    for (const other of countries) {
+      // Skip self
+      if (other.id === country.id) continue;
+
+      // Skip allies
+      if (allyIds.has(other.id)) continue;
+
+      // Skip enemies
+      if (enemyIds.has(other.id)) continue;
+
+      // Find shared enemies
+      const sharedEnemies: Country[] = [];
+      const otherEnemyIds = new Set(other.warsWith);
+
+      for (const enemyId of country.warsWith) {
+        if (otherEnemyIds.has(enemyId)) {
+          const enemy = enemyMap.get(enemyId);
+          if (enemy) sharedEnemies.push(enemy);
+        }
+      }
+
+      // Categorize based on shared enemies
+      if (sharedEnemies.length > 0) {
+        highPotential.push({
+          country: other,
+          sharedEnemies,
+          sharedCount: sharedEnemies.length
+        });
+      } else {
+        regularPotential.push(other);
+      }
+    }
+
+    // Sort high potential by shared enemy count (descending), then by name
+    highPotential.sort((a, b) => {
+      if (b.sharedCount !== a.sharedCount) {
+        return b.sharedCount - a.sharedCount;
+      }
+      return a.country.name.localeCompare(b.country.name);
+    });
+
+    // Sort regular potential by name
+    regularPotential.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Limit to 10 per category
+    return {
+      highPotential: highPotential.slice(0, 10),
+      regularPotential: regularPotential.slice(0, 10)
+    };
   }
 
   private resetView(): void {
