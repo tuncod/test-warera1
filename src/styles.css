@@ -778,3 +778,102 @@ body {
   color: #999;
   border: 1px solid rgba(150, 150, 150, 0.4);
 }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  #info-panel {
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    min-width: unset;
+    max-width: unset;
+    border-radius: 12px;
+  }
+
+  #info-header {
+    padding: 14px 16px;
+  }
+
+  #info-flag {
+    font-size: 24px;
+  }
+
+  #info-header h2 {
+    font-size: 18px;
+  }
+
+  #info-close {
+    width: 28px;
+    height: 28px;
+    padding: 5px 8px;
+  }
+
+  #info-close i {
+    width: 16px;
+    height: 16px;
+  }
+
+  #info-content {
+    padding: 6px 16px 12px;
+  }
+
+  .info-row {
+    padding: 10px 0;
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .info-row .label {
+    font-size: 11px;
+    width: 80px;
+  }
+
+  .info-row .value {
+    font-size: 12px;
+  }
+
+  .info-hint {
+    padding: 10px 16px 12px;
+    font-size: 10px;
+  }
+
+  .info-list-count {
+    font-size: 13px;
+  }
+
+  .info-list-expand {
+    font-size: 9px;
+  }
+
+  .info-list-item {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .potential-badge {
+    font-size: 9px;
+    padding: 1px 4px;
+    margin-left: 4px;
+  }
+
+  #search-toggle {
+    padding: 8px 12px;
+    font-size: 18px;
+  }
+
+  #search-toggle i {
+    width: 18px;
+    height: 18px;
+  }
+
+  #search-panel {
+    width: calc(100vw - 32px);
+    max-width: 320px;
+    padding: 12px;
+  }
+
+  #search-input {
+    font-size: 13px;
+    padding: 7px 10px;
+  }
+}
