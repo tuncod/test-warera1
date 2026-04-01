@@ -414,7 +414,7 @@ class App {
     this.edgeManager.updateFromPositions(countries, this.positions, this.sceneManager.scene);
 
     // Show all countries
-    const allIds = new Set(countries.map(c => c.id));
+    const allIds: Set<string> = new Set(countries.map((c: Country) => c.id));
     this.updateVisibility(allIds);
   }
 
@@ -428,8 +428,8 @@ class App {
 
     // Build a map of enemy names for shared enemy lookup
     const enemyMap = new Map<string, Country>();
-    country.warsWith.forEach(enemyId => {
-      const enemy = countries.find(c => c.id === enemyId);
+    country.warsWith.forEach((enemyId: string) => {
+      const enemy = countries.find((c: Country) => c.id === enemyId);
       if (enemy) enemyMap.set(enemyId, enemy);
     });
 
