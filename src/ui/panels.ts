@@ -22,7 +22,19 @@ const codeToEmoji: Record<string, string> = {
   BY: '🇧🇾', MD: '🇲🇩', RS: '🇷🇸', HR: '🇭🇷', BA: '🇧🇦', SI: '🇸🇮', SK: '🇸🇰',
   BG: '🇧🇬', AL: '🇦🇱', MK: '🇲🇰', ME: '🇲🇪', LT: '🇱🇹', LV: '🇱🇻', EE: '🇪🇪',
   IS: '🇮🇸', LU: '🇱🇺', MT: '🇲🇹', CY: '🇨🇾', AD: '🇦🇩', MC: '🇲🇨', SM: '🇸🇲',
-  LI: '🇱🇮', VA: '🇻🇦'
+  LI: '🇱🇮', VA: '🇻🇦',
+  // Additional countries for comprehensive coverage
+  CV: '🇨🇻', TG: '🇹🇬', BJ: '🇧🇯', BT: '🇧🇹', MR: '🇲🇷', MM: '🇲🇲', GM: '🇬🇲',
+  GW: '🇬🇼', GY: '🇬🇾', LA: '🇱🇦', LS: '🇱🇸', LR: '🇱🇷', MO: '🇲🇨', MW: '🇲🇼',
+  ML: '🇲🇱', MR: '🇲🇷', NE: '🇳🇪', SL: '🇸🇱', SO: '🇸🇴', SS: '🇸🇸', SD: '🇸🇩',
+  SZ: '🇸🇿', TJ: '🇹🇯', TL: '🇹🇱', TM: '🇹🇲', ZM: '🇿🇲', BB: '🇧🇧', BZ: '🇧🇿',
+  DM: '🇩🇲', GD: '🇬🇩', KN: '🇰🇳', LC: '🇱🇨', VC: '🇻🇨', AG: '🇦🇬', AI: '🇦🇮',
+  AS: '🇦🇸', BM: '🇧🇲', VG: '🇻🇬', KY: '🇰🇾', FK: '🇫🇰', GI: '🇬🇮', MS: '🇲🇸',
+  PN: '🇵🇳', SH: '🇸🇭', TC: '🇹🇨', VG: '🇻🇬', HK: '🇭🇰', MO: '🇲🇴', TW: '🇹🇼',
+  KP: '🇰🇵', MP: '🇲🇵', PR: '🇵🇷', BL: '🇧🇱', MF: '🇲🇫', PM: '🇵🇲', WF: '🇼🇫',
+  XK: '🇽🇰',
+  // Default flag for unknown codes
+  DEFAULT: '🏳️'
 };
 
 export class InfoPanel {
@@ -33,11 +45,14 @@ export class InfoPanel {
   private alliesContainer: HTMLElement;
   private warsContainer: HTMLElement;
   private occupationsContainer: HTMLElement;
+  private potentialAlliesContainer: HTMLElement;
   private occupationCache: Map<string, OccupationData> = new Map();
   private loadingCountryId: string | null = null;
   private closeBtn: HTMLElement;
+  private onCloseCallback?: () => void;
 
-  constructor() {
+  constructor(onCloseCallback?: () => void) {
+    this.onCloseCallback = onCloseCallback;
     this.panel = document.getElementById('info-panel')!;
     this.nameEl = document.getElementById('info-name')!;
     this.flagEl = document.getElementById('info-flag')!;
@@ -45,6 +60,7 @@ export class InfoPanel {
     this.alliesContainer = document.getElementById('info-allies-container')!;
     this.warsContainer = document.getElementById('info-wars-container')!;
     this.occupationsContainer = document.getElementById('info-occupations-container')!;
+    this.potentialAlliesContainer = document.getElementById('info-potential-allies-container')!;
     this.closeBtn = document.getElementById('info-close')!;
 
     this.closeBtn.addEventListener('click', () => this.hide());
@@ -171,112 +187,26 @@ export class InfoPanel {
   }
 
   private renderOccupationsEmpty(): void {
-    const container = document.createElement('div');
-    container.className = 'info-list-expandable';
-
-    const header = document.createElement('div');
-    header.className = 'info-list-header';
-    header.innerHTML = `
-      <span class="info-list-count">No occupations</span>
-      <span class="info-list-expand">▼</span>
-    `;
-
-    const itemsContainer = document.createElement('div');
-    itemsContainer.className = 'info-list-items';
-    itemsContainer.innerHTML = '<span style="color: #666; font-size: 13px; padding: 8px;">No active occupations</span>';
-
-    header.addEventListener('click', () => {
-      const isExpanded = itemsContainer.classList.toggle('expanded');
-      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
-    });
-
-    container.appendChild(header);
-    container.appendChild(itemsContainer);
-
-    this.occupationsContainer.innerHTML = '';
-    this.occupationsContainer.appendChild(container);
-  }
-
-  private createOccupationList(label: string, items: string[]): HTMLElement {
-    const container = document.createElement('div');
-    container.className = 'info-list-expandable';
-    container.style.marginTop = '8px';
-
-    const header = document.createElement('div');
-    header.className = 'info-list-header';
-    header.innerHTML = `
-      <span class="info-list-count">${items.length} ${label}</span>
-      <span class="info-list-expand">▼</span>
-    `;
-
-    const itemsContainer = document.createElement('div');
-    itemsContainer.className = 'info-list-items';
-
-    items.forEach(item => {
-      const itemEl = document.createElement('span');
-      itemEl.className = 'info-list-item';
-      itemEl.textContent = item;
-      itemEl.title = item;
-      itemsContainer.appendChild(itemEl);
-    });
-
-    header.addEventListener('click', () => {
-      const isExpanded = itemsContainer.classList.toggle('expanded');
-      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
-    });
-
-    container.appendChild(header);
-    container.appendChild(itemsContainer);
-
-    return container;
+    this.occupationsContainer.innerHTML = '<span style="color: #666; font-style: italic;">None</span>';
   }
 
   private renderOccupationsData(occupying: string[], occupiedBy: string[]): void {
-    const total = occupying.length + occupiedBy.length;
-
-    // Handle empty case
-    if (total === 0) {
+    // Only show occupying regions, ignore occupiedBy
+    if (occupying.length === 0) {
       this.renderOccupationsEmpty();
       return;
     }
 
-    const container = document.createElement('div');
-    container.className = 'info-list-expandable';
-
-    const header = document.createElement('div');
-    header.className = 'info-list-header';
-    header.innerHTML = `
-      <span class="info-list-count">${total} Occupations</span>
-      <span class="info-list-expand">▼</span>
-    `;
-
-    const itemsContainer = document.createElement('div');
-    itemsContainer.className = 'info-list-items';
-
-    // Add subsections
-    if (occupying.length > 0) {
-      itemsContainer.appendChild(this.createOccupationList('Occupying', occupying));
-    }
-
-    if (occupiedBy.length > 0) {
-      itemsContainer.appendChild(this.createOccupationList('Occupied by', occupiedBy));
-    }
-
-    header.addEventListener('click', () => {
-      const isExpanded = itemsContainer.classList.toggle('expanded');
-      header.querySelector('.info-list-expand')!.classList.toggle('expanded', isExpanded);
-    });
-
-    container.appendChild(header);
-    container.appendChild(itemsContainer);
-
     this.occupationsContainer.innerHTML = '';
-    this.occupationsContainer.appendChild(container);
+    this.occupationsContainer.appendChild(this.createExpandableList('Occupying', occupying));
   }
 
   hide(): void {
     this.panel.classList.add('hidden');
     state.selectCountry(null);
+    if (this.onCloseCallback) {
+      this.onCloseCallback();
+    }
   }
 
   isVisible(): boolean {
