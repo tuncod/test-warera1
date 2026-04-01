@@ -1,4 +1,5 @@
 export const API_URL = 'https://api2.warera.io/trpc/country.getAllCountries';
+export const API_AUTH_TOKEN = 'Bearer wae_ae8dc4516462513ce1ea18db612e1fa2b458409fa214985db9dc84dd407c3bc2';
 export const API_CACHE_KEY = 'warera_api_cache';
 export const API_CACHE_TTL = 5 * 60 * 1000;
 export const OCCUPATION_CACHE_KEY = 'warera_occupations';

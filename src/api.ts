@@ -1,5 +1,5 @@
 import type { Country, OccupationData } from '@/types';
-import { API_URL, API_CACHE_KEY, API_CACHE_TTL, OCCUPATION_CACHE_KEY, OCCUPATION_CACHE_TTL, GREEK_NAMES } from '@/config';
+import { API_URL, API_AUTH_TOKEN, API_CACHE_KEY, API_CACHE_TTL, OCCUPATION_CACHE_KEY, OCCUPATION_CACHE_TTL, GREEK_NAMES } from '@/config';
 
 interface OccupationCacheEntry {
   data: Record<string, OccupationData>;
@@ -157,7 +157,7 @@ export async function fetchCountries(): Promise<Country[]> {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Bearer wae_ae8dc4516462513ce1ea18db612e1fa2b458409fa214985db9dc84dd407c3bc2'
+        'Authorization': API_AUTH_TOKEN
       }
     });
 
@@ -190,7 +190,7 @@ export async function fetchOccupations(countryId: string): Promise<OccupationDat
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Authorization': 'Bearer wae_ae8dc4516462513ce1ea18db612e1fa2b458409fa214985db9dc84dd407c3bc2'
+        'Authorization': API_AUTH_TOKEN
       }
     });
 
@@ -199,28 +199,32 @@ export async function fetchOccupations(countryId: string): Promise<OccupationDat
     const json = await response.json() as RegionsResponse;
     const regions = Object.values(json.result?.data ?? {});
 
-    const occupying: string[] = [];
-    const occupiedBy: string[] = [];
+    // Process ALL countries and populate entire cache
+    const allOccupations: Record<string, OccupationData> = {};
 
     for (const region of regions) {
-      // Country is occupying this region from someone else
-      if (region.country === countryId && region.initialCountry !== countryId) {
-        occupying.push(region.name);
-      }
-      // This country's region is occupied by someone else
-      if (region.initialCountry === countryId && region.country !== countryId) {
-        occupiedBy.push(region.name);
+      if (region.country !== region.initialCountry) {
+        // Occupying
+        if (!allOccupations[region.country]) {
+          allOccupations[region.country] = { occupying: [], occupiedBy: [] };
+        }
+        allOccupations[region.country].occupying.push(region.name);
+
+        // Occupied from
+        if (!allOccupations[region.initialCountry]) {
+          allOccupations[region.initialCountry] = { occupying: [], occupiedBy: [] };
+        }
+        allOccupations[region.initialCountry].occupiedBy.push(region.name);
       }
     }
 
-    const result: OccupationData = { occupying, occupiedBy };
-
-    // Update cache
+    // Merge with existing cache
     const existingCache = cache ?? {};
-    existingCache[countryId] = result;
+    Object.assign(existingCache, allOccupations);
     setOccupationCache(existingCache);
 
-    return result;
+    // Return the requested country
+    return existingCache[countryId] ?? { occupying: [], occupiedBy: [] };
   } catch (error) {
     console.error('Failed to fetch occupations:', error);
     return null;
