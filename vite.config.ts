@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  base: '/test-warera1/',
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
