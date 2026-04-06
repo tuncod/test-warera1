@@ -62,7 +62,7 @@ async def api_country(country: str, raw: str = None):
     
     data = response.json()
     items = data.get("result", {}).get("data", [])
-    match = next((item for item in"_id") == countries[country]), None)
+    match = next((item for item in items if item.get("_id") == countries[country]), None)
 
     if not match:
         return {"error": "No match found"}
