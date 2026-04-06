@@ -33,9 +33,9 @@ async def call_api(country: str):
         )
     
     data = response.json()
-    results = data.get("results", [])
-    match = next((item for item in results if item.get("_id") == countries[country]), None)
-    
+    items = data.get("result", {}).get("data", [])
+    match = next((item for item in items if item.get("_id") == countries[country]), None)
+
     return match or {"error": "No match found"}
 
 handler = Mangum(app)
