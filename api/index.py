@@ -20,14 +20,14 @@ headers = {
 def hello():
     return {"message": "hello from fastapi"}
 
-@app.get("/api/{country}")
+@app.get("/api/country/{country}")
 async def call_api(country: str):
     if country not in countries:
         return {"error": "Country not found"}
     
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            f"https://api2.warera.io/trpc/country.getAllCountries",
+            f"https://api2.warera.io/trpc/country.getCountryById",
             headers=headers,
             json={"countryId": countries[country]},
         )
