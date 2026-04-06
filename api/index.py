@@ -46,7 +46,7 @@ def hello():
 
 @app.get("/api/country")
 async def api_country_index(raw: str = None):
-    return api_country("tn", raw)
+    return await api_country("tn", raw)
 
 @app.get("/api/country/{country}")
 async def api_country(country: str, raw: str = None):
