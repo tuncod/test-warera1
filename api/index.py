@@ -65,7 +65,7 @@ async def call_api(country: str, raw: str = None):
 
     countryData = {}
     countryData["id"] = encode(countries[country], KEY)
-    countryData["flag"] = "https://flagcdn.com/{countries[country]}.svg"
+    countryData["flag"] = f"https://flagcdn.com/{countries[country]}.svg"
 
     if raw:
         countryData["raw"] = match
