@@ -45,7 +45,7 @@ def hello():
     return {"message": "hello from fastapi"}
 
 @app.get("/api/country/{country}")
-async def call_api(country: str):
+async def call_api(country: str, raw: str = None):
     if country not in countries:
         return {"error": "Country not found"}
     
@@ -60,9 +60,15 @@ async def call_api(country: str):
     items = data.get("result", {}).get("data", [])
     match = next((item for item in items if item.get("_id") == countries[country]), None)
 
-    if match:
-        match["test_id"] = encode(countries[country], KEY)
+    if not match:
+        return {"error": "No match found"}
 
-    return match or {"error": "No match found"}
+    countryData = {}
+    countryData["id"] = encode(countries[country], KEY)
+
+    if raw:
+        countryData["raw"] = match
+
+    return countryData
 
 handler = Mangum(app)
