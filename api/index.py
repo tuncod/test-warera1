@@ -4,7 +4,7 @@ import httpx
 
 app = FastAPI()
 
-API_AUTH_TOKEN = "Bearer wae_ae8dc4516462513ce1ea18db612e1fa2b458409fa214985db9dc84dd407c3bc2"
+API_AUTH_TOKEN = "" # "Bearer wae_ae8dc4516462513ce1ea18db612e1fa2b458409fa214985db9dc84dd407c3bc2"
 
 countries = {
     "tn": "6813b6d546e731854c7ac84e",
@@ -27,11 +27,15 @@ async def call_api(country: str):
     
     async with httpx.AsyncClient() as client:
         response = await client.post(
-            f"https://api2.warera.io/trpc/country.getCountryById",
+            f"https://api2.warera.io/trpc/country.getAllCountries",
             headers=headers,
             json={"countryId": countries[country]},
         )
     
-    return response.json()
+    data = response.json()
+    results = data.get("results", [])
+    match = next((item for item in results if item.get("_id") == countries[country]), None)
+    
+    return match or {"error": "No match found"}
 
 handler = Mangum(app)
