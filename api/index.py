@@ -1,6 +1,30 @@
 from fastapi import FastAPI
 from mangum import Mangum
 import httpx
+import string
+
+ALPHABET = string.digits + string.ascii_letters  # 0-9a-zA-Z
+
+def to_base62(n: int) -> str:
+    result = ""
+    while n:
+        result = ALPHABET[n % 62] + result
+        n //= 62
+    return result or "0"
+
+def from_base62(s: str) -> int:
+    return sum(ALPHABET.index(c) * 62**i for i, c in enumerate(reversed(s)))
+
+def encode(s: str, key: str) -> str:
+    xored = bytes(a ^ ord(key[i % len(key)]) for i, a in enumerate(s.encode()))
+    return to_base62(int(xored.hex(), 16))
+
+def decode(s: str, key: str) -> str:
+    n = from_base62(s)
+    raw = bytes.fromhex(hex(n)[2:])
+    return bytes(a ^ ord(key[i % len(key)]) for i, a in enumerate(raw)).decode()
+
+KEY = "my-secret"
 
 app = FastAPI()
 
@@ -35,6 +59,9 @@ async def call_api(country: str):
     data = response.json()
     items = data.get("result", {}).get("data", [])
     match = next((item for item in items if item.get("_id") == countries[country]), None)
+
+    if match:
+        match["test_id"] = encode(countries[country], KEY)
 
     return match or {"error": "No match found"}
 
