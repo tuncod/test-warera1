@@ -82,7 +82,11 @@ async def api_country(country: str, raw: str = None):
 async def scalar_docs():
     return get_scalar_api_reference(
         openapi_url="/openapi.json",
-        title="WarEra"
+        title="WarEra",
+        default_http_client={
+          "targetKey": "javascript",
+          "clientKey": "ofetch"
+        }
     )
 
 handler = Mangum(app)
