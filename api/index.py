@@ -93,9 +93,11 @@ async def scalar_docs():
     return get_scalar_api_reference(
         openapi_url="/openapi.json",
         title="WarEra",
-        default_http_client={
-          "targetKey": "javascript",
-          "clientKey": "ofetch"
+        overrides={
+            "defaultHttpClient": {
+                "targetKey": "javascript",
+                "clientKey": "ofetch"
+            }
         }
     )
 
