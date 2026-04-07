@@ -1,4 +1,4 @@
 fastapi
 mangum
 httpx
-scalar-fastapi
+scalar-fastapi>=1.4.0
