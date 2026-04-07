@@ -5,7 +5,7 @@ import string
 from fastapi.responses import HTMLResponse
 from scalar_fastapi import get_scalar_api_reference
 import traceback
-from fastapi import Request
+from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
 ALPHABET = string.digits + string.ascii_letters  # 0-9a-zA-Z
@@ -80,6 +80,7 @@ async def api_country(country: str, raw: bool = False):
         return {"error": "No match found"}
 
     countryData = {}
+    countryData["status"] = status.HTTP_404_NOT_FOUND
     countryData["id"] = encode(countries[country], KEY)
     countryData["flag"] = f"https://flagcdn.com/{country}.svg"
 
