@@ -61,7 +61,7 @@ async def api_country_index(raw: str = None):
     return await api_country("tn", raw)
 
 @app.get("/api/country/{country}")
-async def api_country(country: str, raw: str = None):
+async def api_country(country: str, raw: bool = False):
     if country not in countries:
         return {"error": "Country not found"}
     
