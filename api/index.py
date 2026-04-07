@@ -78,11 +78,11 @@ async def api_country(country: str, raw: str = None):
 
     return countryData
 
-@app.get("/api/docs", include_in_schema=False)
+@app.get("/docs", include_in_schema=False)
 async def scalar_docs():
     return get_scalar_api_reference(
         openapi_url="/openapi.json",
-        title="My API"
+        title="WarEra"
     )
 
 handler = Mangum(app)
