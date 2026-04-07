@@ -42,11 +42,11 @@ headers = {
     "Authorization": API_AUTH_TOKEN,
 }
 
-@app.get("/api/hello")
+@app.get("/api/hello", include_in_schema=False)
 def hello():
     return {"message": "hello from fastapi"}
 
-@app.get("/api/country")
+@app.get("/api/country", include_in_schema=False)
 async def api_country_index(raw: str = None):
     return await api_country("tn", raw)
 
