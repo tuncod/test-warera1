@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from mangum import Mangum
 import httpx
 import string
+from fastapi.responses import HTMLResponse
+from scalar_fastapi import get_scalar_api_reference
 
 ALPHABET = string.digits + string.ascii_letters  # 0-9a-zA-Z
 
@@ -26,7 +28,7 @@ def decode(s: str, key: str) -> str:
 
 KEY = "my-secret"
 
-app = FastAPI()
+app = FastAPI(docs_url=None)
 
 API_AUTH_TOKEN = "" # "Bearer wae_ae8dc4516462513ce1ea18db612e1fa2b458409fa214985db9dc84dd407c3bc2"
 
@@ -75,5 +77,12 @@ async def api_country(country: str, raw: str = None):
         countryData["raw"] = match
 
     return countryData
+
+@app.get("/docs", include_in_schema=False)
+async def scalar_docs():
+    return get_scalar_api_reference(
+        openapi_url="/openapi.json",
+        title="My API"
+    )
 
 handler = Mangum(app)
