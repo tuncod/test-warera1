@@ -97,7 +97,8 @@ async def scalar_docs():
             "defaultHttpClient": {
                 "targetKey": "js",
                 "clientKey": "ofetch"
-            }
+            },
+            "hiddenClients": True
         }
     )
 
