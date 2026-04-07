@@ -4,6 +4,9 @@ import httpx
 import string
 from fastapi.responses import HTMLResponse
 from scalar_fastapi import get_scalar_api_reference
+import traceback
+from fastapi import Request
+from fastapi.responses import JSONResponse
 
 ALPHABET = string.digits + string.ascii_letters  # 0-9a-zA-Z
 
@@ -41,6 +44,13 @@ headers = {
     "Content-Type": "application/json",
     "Authorization": API_AUTH_TOKEN,
 }
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"error": str(exc), "trace": traceback.format_exc()}
+    )
 
 @app.get("/api/hello", include_in_schema=False)
 def hello():
