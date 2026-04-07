@@ -109,7 +109,11 @@ async def scalar_docs():
               # hide all others entirely
               "clojure": True,
               "csharp": True,
+              "http": True,
+              "objc": True,
               "dart": True,
+              "ocaml": True,
+              "fsharp": True,
               "go": True,
               "kotlin": True,
               "ruby": True,
