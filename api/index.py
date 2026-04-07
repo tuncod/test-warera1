@@ -99,13 +99,13 @@ async def scalar_docs():
                 "clientKey": "ofetch"
             },
             "hiddenClients": {
-              "shell": ["curl", "httpie", "wget"],
-              "node": ["axios", "fetch", "undici"],
+              "shell": True, # ["curl", "httpie", "wget"],
+              "node": True, # ["axios", "fetch", "undici"],
               "js": ["axios", "fetch", "jquery", "xhr"],
-              "python": ["requests", "httpx_async", "httpx_sync", "python3"],
-              "c": ["libcurl"],
-              "java": ["asynchttp", "nethttp", "okhttp", "unirest"],
-              "php": ["curl", "guzzle"],
+              "python": True, # ["requests", "httpx_async", "httpx_sync", "python3"],
+              "c": True, # ["libcurl"],
+              "java": True, # ["asynchttp", "nethttp", "okhttp", "unirest"],
+              "php": True, # ["curl", "guzzle"],
               # hide all others entirely
               "clojure": True,
               "csharp": True,
