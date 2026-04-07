@@ -95,7 +95,7 @@ async def scalar_docs():
         title="WarEra",
         overrides={
             "defaultHttpClient": {
-                "targetKey": "javascript",
+                "targetKey": "js",
                 "clientKey": "ofetch"
             }
         }
