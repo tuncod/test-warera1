@@ -1,4 +1,10 @@
 fastapi
+pydantic
+supabase
+python-jose
+passlib
+slowapi
+loguru
 mangum
 httpx
 scalar-fastapi>=1.4.0
