@@ -5,6 +5,7 @@ python-jose
 passlib
 slowapi
 loguru
+vercel
 mangum
 httpx
 scalar-fastapi>=1.4.0
