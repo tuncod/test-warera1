@@ -4,9 +4,10 @@
   "description": "3D visualization of country alliances from War Era game",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0 --port 8000"
+    "build": "nuxt build",
+    "static:dev": "vite",
+    "static:build": "vite build",
+    "static:preview": "vite preview --host 0.0.0.0 --port 8000"
   },
   "dependencies": {
     "ofetch": "^1.5.1",
