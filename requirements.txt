@@ -9,3 +9,4 @@ vercel
 mangum
 httpx
 scalar-fastapi>=1.4.0
+jinja2
