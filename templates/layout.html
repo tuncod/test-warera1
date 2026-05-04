@@ -16,9 +16,9 @@
       />
 
       {% for css in manifest['src/main.ts']['css'] %}
-        <link rel="stylesheet" href="/{{ css }}" />
+        <link rel="stylesheet" href="/static/dist/{{ css }}" />
       {% endfor %}
-      <script type="text/javascript" src="{{ manifest['src/main.ts']['file'] }}" defer></script>
+      <script type="text/javascript" src="/static/dist/{{ manifest['src/main.ts']['file'] }}" defer></script>
     {% endblock %}
   </head>
   <body>
