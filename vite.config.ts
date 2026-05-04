@@ -12,14 +12,18 @@ export default defineConfig({
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
   },
   build: {
-    outDir: 'dist',
+    outDir: 'static/dist',
     sourcemap: false,
+    manifest: true,
     rollupOptions: {
+      input: './src/main.ts',
+      /*
       output: {
         manualChunks: {
           three: ['three']
         }
       }
+      */
     }
   },
   plugins: [vue(), tailwindcss()],
