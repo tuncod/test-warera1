@@ -9,6 +9,7 @@ from fastapi import Request, status
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+import fastapi_vite
 
 ALPHABET = string.digits + string.ascii_letters  # 0-9a-zA-Z
 
@@ -38,6 +39,8 @@ app = FastAPI(docs_url=None)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
+# templates.env.globals['vite_hmr_client'] = fastapi_vite.vite_hmr_client
+templates.env.globals['vite_asset'] = fastapi_vite.vite_asset
 
 API_AUTH_TOKEN = "" # "Bearer wae_ae8dc4516462513ce1ea18db612e1fa2b458409fa214985db9dc84dd407c3bc2"
 
@@ -56,6 +59,12 @@ async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(
         status_code=500,
         content={"error": str(exc), "trace": traceback.format_exc()}
+    )
+
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="index.html", context={"id": "dhhd"}
     )
 
 @app.get("/api/hello", include_in_schema=False)
