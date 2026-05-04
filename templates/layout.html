@@ -113,11 +113,25 @@
       </div>
     </nav>
     <div id="content" class="page active relative z-10">{% block content %}{% endblock %}</div>
-    <div id="footer">
-      {% block footer %}
-        &copy; Copyright 2008 by
-        <a href="http://domain.invalid/">you</a>.
-      {% endblock %}
-    </div>
+
+    {% block footer %}
+      <footer class="relative z-10 mt-4" style="border-top: 1px solid var(--border)">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <div class="w-5 h-5 rounded bg-amber-400 flex items-center justify-center">
+              <span class="display text-xs font-bold leading-none" style="color: #0a0b0f">V</span>
+            </div>
+            <span class="display t-heading text-sm">Verity</span>
+            <span class="t-muted text-xs ml-2">© 2025</span>
+          </div>
+          <div class="flex items-center gap-5 t-muted text-xs">
+            <a href="#" class="hover:t-text transition-colors">About</a>
+            <a href="#" class="hover:t-text transition-colors">Guidelines</a>
+            <a href="#" class="hover:t-text transition-colors">Privacy</a>
+            <a href="#" class="hover:t-text transition-colors">Terms</a>
+          </div>
+        </div>
+      </footer>
+    {% endblock %}
   </body>
 </html>
