@@ -65,9 +65,9 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"error": str(exc), "trace": traceback.format_exc()}
     )
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def index(request: Request):
-    return {"h": manifest_data }
+    return manifest_data
 
 @app.get("/api/hello", include_in_schema=False)
 def hello():
