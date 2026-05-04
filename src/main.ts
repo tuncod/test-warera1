@@ -35,6 +35,7 @@ setInterval(() => testErawar(), 3500)
         localStorage.setItem('verity-theme', 'dark');
       }
     }
+    window.toggleTheme = toggleTheme
 
     // ===== PAGE ROUTING =====
     function showPage(name) {
@@ -43,12 +44,14 @@ setInterval(() => testErawar(), 3500)
       window.scrollTo({ top: 0, behavior: 'smooth' });
       document.getElementById('readProgress').style.width = '0%';
     }
+    window.showPage = showPage
 
     // ===== FILTER TABS =====
     function setFilter(name, el) {
       document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
       if (el) el.classList.add('active');
     }
+    window.setFilter = setFilter
 
     // ===== LIKE =====
     function toggleLike(btn) {
@@ -57,6 +60,7 @@ setInterval(() => testErawar(), 3500)
       const count = parseInt(countEl.textContent);
       countEl.textContent = btn.classList.contains('liked') ? count + 1 : count - 1;
     }
+    window.toggleLike = toggleLike
 
     // ===== FOLLOW =====
     function toggleFollow(btn) {
@@ -68,6 +72,7 @@ setInterval(() => testErawar(), 3500)
         btn.textContent = 'Follow';
       }
     }
+    window.toggleFollow = 
 
     // ===== PROFILE TABS =====
     function setProfileTab(btn) {
@@ -80,6 +85,7 @@ setInterval(() => testErawar(), 3500)
       btn.classList.remove('t-muted');
       btn.classList.add('t-heading');
     }
+    window.setProfileTab = setProfileTab
 
     // ===== READ PROGRESS =====
     window.addEventListener('scroll', () => {
