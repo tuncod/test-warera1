@@ -9,12 +9,12 @@
   <script
   type="text/javascript"
   defer
-  src="{{ asset_url('src/main.ts') }}"
+  src=""
 ></script>
   </head>
   <body>
     <h1 class="text-3xl font-bold underline text-clifford">
-      Hello world!
+      Hello world! {{ manifest['src/main.ts']['file'] }}
     </h1>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
