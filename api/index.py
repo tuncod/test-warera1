@@ -69,7 +69,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 @app.get("/")
 async def index(request: Request):
-    return manifest_data
+    return templates.TemplateResponse(
+        request=request, name="index.html", context={"id": "dhhd"}
+    )
 
 @app.get("/api/hello", include_in_schema=False)
 def hello():
