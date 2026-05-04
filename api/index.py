@@ -56,7 +56,7 @@ headers = {
 }
 
 with open("static/dist/.vite/manifest.json") as f:
-    manifest_data = f # json.load(f)
+    manifest_data = json.load(f)
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
