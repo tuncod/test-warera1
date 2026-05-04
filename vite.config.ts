@@ -20,7 +20,7 @@ export default defineConfig({
       /*
       output: {
         manualChunks: {
-          three: ['three']
+          three: ['three', 'vue']
         }
       }
       */
