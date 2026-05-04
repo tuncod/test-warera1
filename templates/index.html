@@ -8,7 +8,7 @@
     {% for css in manifest['src/main.ts']['css'] %}
     <link rel="stylesheet" href="/{{ css }}">
     {% endfor %}
-    <script type="text/javascript" src="{{ manifest['src/main.ts']['file'] }}"></script>
+    <script type="text/javascript" src="{{ manifest['src/main.ts']['file'] }}" defer></script>
   </head>
   <body>
     <h1 class="text-3xl font-bold underline text-clifford">
