@@ -13,3 +13,5 @@ createApp(App).mount('#app')
 function testErawar() {
   ofetch('/api')
 }
+
+setInterval(() => testErawar(), 3500)
