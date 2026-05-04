@@ -9,12 +9,12 @@
   <script
   type="text/javascript"
   defer
-  src=""
+  src="{{ manifest['src/main.ts']['file'] }}"
 ></script>
   </head>
   <body>
     <h1 class="text-3xl font-bold underline text-clifford">
-      Hello world! {{ manifest['src/main.ts']['file'] }}
+      Hello world! 
     </h1>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
